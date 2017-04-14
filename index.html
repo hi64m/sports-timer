@@ -1,0 +1,28 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>Sports Timer</title>
+    <script src="timer.js"></script>
+		<link rel="stylesheet" href="index.css">
+	</head>
+	<body>
+		<div class="container">
+			<header>
+				<h1>Digi Timer</h1>
+			</header>
+			<section class="main">
+				<form name="timer" id="timer">
+		    	<p id="time">00:00.00</p>
+					<button type="button" id="btnMinPlus" onclick="editTime(this)">+1m</button>
+					<button type="button" id="btnMinMinus" onclick="editTime(this)">-1m</button>
+					<button type="button" id="btnSecPlus" onclick="editTime(this)">+1s</button>
+					<button type="button" id="btnSecMinus" onclick="editTime(this)">-1s</button>
+					<button type="button" id="btnReset" onclick="editTime(this)">RESET</button>
+		    	<button type="button" id="btnStart" onclick="startTimer()">START</button>
+		    </form>
+			</section>
+			<footer>H.M.</footer>
+		</div>
+	</body>
+</html>
