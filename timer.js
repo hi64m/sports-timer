@@ -5,7 +5,12 @@ var mode = STOP;            // ストップウォッチのモード RUN/STOP
 var startTime;              // スタートした時刻
 var remainingTime = 0;      // 残り時間
 
+var shotStartTime;
+var shotRemainingTime = 0;
+var shotClockMode = STOP;
+
 var timerId;                // タイマー
+var shotTimerId;
 
 var MINUTE = 60 * 1000;
 var SECOND = 1000;
@@ -36,8 +41,26 @@ function editTime(button) {
     default:
       break;
   }
-  updateButtons();
-  drawTime(remainingTime);
+  drawClock();
+}
+
+function editShotTime(button) {
+  switch (button.getAttribute('id')) {
+    case 'btnShotPlus':
+      shotRemainingTime += SECOND;
+      break;
+    case 'btnShotMinus':
+      if (shotRemainingTime >= SECOND) {
+        shotRemainingTime -= SECOND;
+      }
+      break;
+    case 'btnShotReset':
+      shotRemainingTime = 30 * SECOND;
+      break;
+    default:
+      break;
+  }
+  drawShotClock();
 }
 
 function startTimer() {
@@ -54,7 +77,24 @@ function startTimer() {
     default:
       break;
   }
-  updateButtons();
+  drawClock();
+}
+
+function startShotTimer() {
+  switch (shotClockMode) {
+    case STOP:
+      shotClockMode = RUN;
+      shotStartTime = new Date().getTime();
+      shotTimerId = setTimeout(runShotTimer, 10);
+      break;
+    case RUN:
+      shotClockMode = STOP;
+      clearTimeout(shotTimerId);
+      break;
+    default:
+      break;
+  }
+  drawShotClock();
 }
 
 function updateButtons() {
@@ -65,6 +105,14 @@ function updateButtons() {
   document.getElementById('btnReset').disabled = (mode === RUN);
   document.getElementById('btnStart').disabled = (remainingTime <= 0);
   document.getElementById('btnStart').innerHTML = (mode === RUN) ? 'STOP' : 'START';
+}
+
+function updateShotButtons() {
+  document.getElementById('btnShotPlus').disabled = (shotClockMode === RUN);
+  document.getElementById('btnShotMinus').disabled = (shotClockMode === RUN);
+  document.getElementById('btnShotReset').disabled = (shotClockMode === RUN);
+  document.getElementById('btnShotStart').disabled = (shotRemainingTime <= 0);
+  document.getElementById('btnShotStart').innerHTML = (shotClockMode === RUN) ? 'STOP' : 'START';
 }
 
 function drawTime(displayTime) {
@@ -78,6 +126,11 @@ function drawTime(displayTime) {
   document.getElementById('time').innerHTML = strTime;
 }
 
+function drawShotTime(displayTime) {
+  var sec = Math.floor(displayTime / SECOND);
+  document.getElementById('shotTime').innerHTML = ('0' + sec).slice(-2);
+}
+
 function updateRemainingTime() {
   var now = new Date().getTime();
   remainingTime -= (now - startTime);
@@ -87,13 +140,41 @@ function updateRemainingTime() {
   startTime = now;
 }
 
+function updateShotRemainingTime() {
+  var now = new Date().getTime();
+  shotRemainingTime -= (now - shotStartTime);
+  if (shotRemainingTime < 0) {
+    shotRemainingTime = 0;
+  }
+  shotStartTime = now;
+}
+
 function runTimer() {
   updateRemainingTime();
   if (remainingTime > 0) {
     timerId = setTimeout(runTimer, 10);
   } else {
     mode = STOP;
-    updateButtons();
   }
+  drawClock();
+}
+
+function runShotTimer() {
+  updateShotRemainingTime();
+  if (shotRemainingTime > 0) {
+    shotTimerId = setTimeout(runShotTimer, 10);
+  } else {
+    shotClockMode = STOP;
+  }
+  drawShotClock();
+}
+
+function drawClock() {
+  updateButtons();
   drawTime(remainingTime);
+}
+
+function drawShotClock() {
+  updateShotButtons();
+  drawShotTime(shotRemainingTime);
 }

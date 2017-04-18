@@ -13,14 +13,21 @@
 			</header>
 			<section class="main">
 				<form name="timer" id="timer">
-		    	<p id="time">00:00.00</p>
+		    		<p id="time">00:00.00</p>
 					<button type="button" id="btnMinPlus" onclick="editTime(this)">+1m</button>
 					<button type="button" id="btnMinMinus" onclick="editTime(this)">-1m</button>
 					<button type="button" id="btnSecPlus" onclick="editTime(this)">+1s</button>
 					<button type="button" id="btnSecMinus" onclick="editTime(this)">-1s</button>
 					<button type="button" id="btnReset" onclick="editTime(this)">RESET</button>
-		    	<button type="button" id="btnStart" onclick="startTimer()">START</button>
-		    </form>
+			    	<button type="button" id="btnStart" onclick="startTimer()">START</button>
+			    </form>
+				<form name="shotClock" id="shotClock">
+		    		<p id="shotTime">00</p>
+					<button type="button" id="btnShotPlus" onclick="editShotTime(this)">+1</button>
+					<button type="button" id="btnShotMinus" onclick="editShotTime(this)">-1</button>
+					<button type="button" id="btnShotReset" onclick="editShotTime(this)">RESET</button>
+			    	<button type="button" id="btnShotStart" onclick="startShotTimer()">START</button>
+			    </form>
 			</section>
 			<footer>H.M.</footer>
 		</div>
