@@ -29,15 +29,19 @@
   },
   "devDependencies": {
     "devtron": "^1.1.0",
-    "electron-packager": "^8.0.0",
     "electron": "^1.0.1",
+    "electron-packager": "^8.0.0",
+    "eslint": "^3.19.0",
+    "eslint-config-xo": "^0.18.1",
+    "eslint-config-xo-react": "^0.11.1",
+    "eslint-plugin-react": "^6.10.3",
     "xo": "^0.16.0"
   },
   "xo": {
-    "esnext": true,
-    "envs": [
-      "node",
-      "browser"
-    ]
+    "space": true,
+    "env": {
+      "browser": true,
+      "node": true
+    }
   }
 }

@@ -10,34 +10,38 @@ var timerId;                // タイマー
 var MINUTE = 60 * 1000;
 var SECOND = 1000;
 
+/* globals document,  */
+
 function editTime(button) {
   switch (button.getAttribute('id')) {
-    case "btnMinPlus":
+    case 'btnMinPlus':
       remainingTime += MINUTE;
       break;
-    case "btnMinMinus":
+    case 'btnMinMinus':
       if (remainingTime >= MINUTE) {
         remainingTime -= MINUTE;
       }
       break;
-    case "btnSecPlus":
+    case 'btnSecPlus':
       remainingTime += SECOND;
       break;
-    case "btnSecMinus":
+    case 'btnSecMinus':
       if (remainingTime >= SECOND) {
         remainingTime -= SECOND;
       }
       break;
-    case "btnReset":
+    case 'btnReset':
       remainingTime = 0;
+      break;
+    default:
       break;
   }
   updateButtons();
   drawTime(remainingTime);
 }
 
-function startTimer(){
-  switch(mode){
+function startTimer() {
+  switch (mode) {
     case STOP:      // スタートを押したとき
       mode = RUN;
       startTime = new Date().getTime();
@@ -47,36 +51,39 @@ function startTimer(){
       mode = STOP;
       clearTimeout(timerId);
       break;
+    default:
+      break;
   }
   updateButtons();
 }
 
 function updateButtons() {
-  document.getElementById("btnMinPlus").disabled = (mode == RUN);
-  document.getElementById("btnMinMinus").disabled = (mode == RUN);
-  document.getElementById("btnSecPlus").disabled = (mode == RUN);
-  document.getElementById("btnSecMinus").disabled = (mode == RUN);
-  document.getElementById("btnReset").disabled = (mode == RUN);
-  document.getElementById("btnStart").disabled = (remainingTime <= 0);
-  document.getElementById("btnStart").innerHTML = (mode == RUN) ? "STOP" : "START";
+  document.getElementById('btnMinPlus').disabled = (mode === RUN);
+  document.getElementById('btnMinMinus').disabled = (mode === RUN);
+  document.getElementById('btnSecPlus').disabled = (mode === RUN);
+  document.getElementById('btnSecMinus').disabled = (mode === RUN);
+  document.getElementById('btnReset').disabled = (mode === RUN);
+  document.getElementById('btnStart').disabled = (remainingTime <= 0);
+  document.getElementById('btnStart').innerHTML = (mode === RUN) ? 'STOP' : 'START';
 }
 
 function drawTime(displayTime) {
   var min = Math.floor(displayTime / MINUTE);
   var sec = Math.floor((displayTime % MINUTE) / SECOND);
-  var sec_100 = Math.floor((displayTime % SECOND) / 10);
+  var sec100 = Math.floor((displayTime % SECOND) / 10);
 
-  var strTime = ("0" + min).slice(-2) + ":"
-    + ("0" + sec).slice(-2) + "."
-    + ("0" + sec_100).slice(-2);
-  document.getElementById("time").innerHTML = strTime;
+  var strTime = ('0' + min).slice(-2) + ':' +
+      ('0' + sec).slice(-2) + '.' +
+      ('0' + sec100).slice(-2);
+  document.getElementById('time').innerHTML = strTime;
 }
 
 function updateRemainingTime() {
-  now = new Date().getTime();
+  var now = new Date().getTime();
   remainingTime -= (now - startTime);
-  if (remainingTime < 0)
+  if (remainingTime < 0) {
     remainingTime = 0;
+  }
   startTime = now;
 }
 
