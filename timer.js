@@ -1,9 +1,9 @@
 var RUN = 1;                // 動作中
 var STOP = 0;               // 停止中
-var mode = STOP;            // ストップウォッチのモード RUN/STOP
 
 var startTime;              // スタートした時刻
 var remainingTime = 0;      // 残り時間
+var mode = STOP;            // ストップウォッチのモード RUN/STOP
 
 var shotStartTime;
 var shotRemainingTime = 0;
