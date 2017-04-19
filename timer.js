@@ -1,7 +1,8 @@
 /**
  * Sports Timer
  */
-var Mousetrap = require('mousetrap');
+
+// var Mousetrap = require('mousetrap');
 
 var RUN = 1;                // 動作中
 var STOP = 0;               // 停止中
@@ -23,9 +24,9 @@ var SECOND = 1000;
 var scoreA = 0;
 var scoreB = 0;
 
-/* globals document, window */
+/* globals document, window, Mousetrap */
 
-window.onload = function () {
+function addKeyboardShortCut() {
   Mousetrap.bind('q', btnMinPlus);
   Mousetrap.bind('a', btnMinMinus);
   Mousetrap.bind('w', btnSecPlus);
@@ -44,7 +45,9 @@ window.onload = function () {
   Mousetrap.bind('v', btnScoreReset);
   Mousetrap.bind('b', btnScorePlusB);
   Mousetrap.bind('n', btnScoreMinusB);
+}
 
+function addEvents() {
   document.getElementById('btnMinPlus').addEventListener('click', btnMinPlus, false);
   document.getElementById('btnMinMinus').addEventListener('click', btnMinMinus, false);
   document.getElementById('btnSecPlus').addEventListener('click', btnSecPlus, false);
@@ -63,7 +66,7 @@ window.onload = function () {
   document.getElementById('btnScoreMinusB').addEventListener('click', btnScoreMinusB, false);
   document.getElementById('btnScoreChangeCourt').addEventListener('click', btnScoreChangeCourt, false);
   document.getElementById('btnScoreReset').addEventListener('click', btnScoreReset, false);
-};
+}
 
 /**
  * Main Clock
@@ -279,3 +282,6 @@ function drawScore() {
   document.getElementById('scoreA').innerHTML = scoreA;
   document.getElementById('scoreB').innerHTML = scoreB;
 }
+
+window.addEventListener('load', addEvents, false);
+window.addEventListener('load', addKeyboardShortCut, false);
