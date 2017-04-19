@@ -35,6 +35,7 @@
     "eslint-config-xo": "^0.18.1",
     "eslint-config-xo-react": "^0.11.1",
     "eslint-plugin-react": "^6.10.3",
+    "mousetrap": "^1.6.1",
     "xo": "^0.16.0"
   },
   "xo": {

@@ -1,3 +1,8 @@
+/**
+ * Sports Timer
+ */
+var Mousetrap = require('mousetrap');
+
 var RUN = 1;                // 動作中
 var STOP = 0;               // 停止中
 
@@ -21,6 +26,25 @@ var scoreB = 0;
 /* globals document, window */
 
 window.onload = function () {
+  Mousetrap.bind('q', btnMinPlus);
+  Mousetrap.bind('a', btnMinMinus);
+  Mousetrap.bind('w', btnSecPlus);
+  Mousetrap.bind('s', btnSecMinus);
+  Mousetrap.bind('r', btnReset);
+  Mousetrap.bind('f', btnStart);
+
+  Mousetrap.bind('y', btnShotPlus);
+  Mousetrap.bind('h', btnShotMinus);
+  Mousetrap.bind('u', btnShotReset);
+  Mousetrap.bind('j', btnShotStart);
+
+  Mousetrap.bind('z', btnScorePlusA);
+  Mousetrap.bind('x', btnScoreMinusA);
+  Mousetrap.bind('c', btnScoreChangeCourt);
+  Mousetrap.bind('v', btnScoreReset);
+  Mousetrap.bind('b', btnScorePlusB);
+  Mousetrap.bind('n', btnScoreMinusB);
+
   document.getElementById('btnMinPlus').addEventListener('click', btnMinPlus, false);
   document.getElementById('btnMinMinus').addEventListener('click', btnMinMinus, false);
   document.getElementById('btnSecPlus').addEventListener('click', btnSecPlus, false);
