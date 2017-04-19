@@ -28,6 +28,16 @@
 					<button type="button" id="btnShotReset" onclick="editShotTime(this)">RESET</button>
 			    	<button type="button" id="btnShotStart" onclick="startShotTimer()">START</button>
 			    </form>
+				<form name="scoreboard" id="scoreboard">
+		    		<p id="scoreA">0</p>
+		    		<p id="scoreB">0</p>
+					<button type="button" id="btnScorePlusA" onclick="editScore(this)">+</button>
+					<button type="button" id="btnScoreMinusA" onclick="editScore(this)">-</button>
+					<button type="button" id="btnScoreChangeCourt" onclick="editScore(this)">Change Court</button>
+					<button type="button" id="btnScoreReset" onClick="editScore(this)">CLEAR</button>
+					<button type="button" id="btnScorePlusB" onclick="editScore(this)">+</button>
+			    	<button type="button" id="btnScoreMinusB" onclick="editScore(this)">-</button>
+			    </form>
 			</section>
 			<footer>H.M.</footer>
 		</div>

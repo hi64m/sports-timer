@@ -15,7 +15,10 @@ var shotTimerId;
 var MINUTE = 60 * 1000;
 var SECOND = 1000;
 
-/* globals document,  */
+var scoreA = 0;
+var scoreB = 0;
+
+/* globals document */
 
 function editTime(button) {
   switch (button.getAttribute('id')) {
@@ -61,6 +64,39 @@ function editShotTime(button) {
       break;
   }
   drawShotClock();
+}
+
+function editScore(button) {
+  switch (button.getAttribute('id')) {
+    case 'btnScorePlusA':
+      scoreA++;
+      break;
+    case 'btnScoreMinusA':
+      if (scoreA > 0) {
+        scoreA--;
+      }
+      break;
+    case 'btnScorePlusB':
+      scoreB++;
+      break;
+    case 'btnScoreMinusB':
+      if (scoreB > 0) {
+        scoreB--;
+      }
+      break;
+    case 'btnScoreChangeCourt':
+      var tmpScoreA = scoreA;
+      scoreA = scoreB;
+      scoreB = tmpScoreA;
+      break;
+    case 'btnScoreReset':
+      scoreA = 0;
+      scoreB = 0;
+      break;
+    default:
+      break;
+  }
+  drawScore();
 }
 
 function startTimer() {
@@ -129,6 +165,11 @@ function drawTime(displayTime) {
 function drawShotTime(displayTime) {
   var sec = Math.floor(displayTime / SECOND);
   document.getElementById('shotTime').innerHTML = ('0' + sec).slice(-2);
+}
+
+function drawScore() {
+  document.getElementById('scoreA').innerHTML = scoreA;
+  document.getElementById('scoreB').innerHTML = scoreB;
 }
 
 function updateRemainingTime() {
