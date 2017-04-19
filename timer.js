@@ -18,88 +18,63 @@ var SECOND = 1000;
 var scoreA = 0;
 var scoreB = 0;
 
-/* globals document */
+/* globals document, window */
 
-function editTime(button) {
-  switch (button.getAttribute('id')) {
-    case 'btnMinPlus':
-      remainingTime += MINUTE;
-      break;
-    case 'btnMinMinus':
-      if (remainingTime >= MINUTE) {
-        remainingTime -= MINUTE;
-      }
-      break;
-    case 'btnSecPlus':
-      remainingTime += SECOND;
-      break;
-    case 'btnSecMinus':
-      if (remainingTime >= SECOND) {
-        remainingTime -= SECOND;
-      }
-      break;
-    case 'btnReset':
-      remainingTime = 0;
-      break;
-    default:
-      break;
+window.onload = function () {
+  document.getElementById('btnMinPlus').addEventListener('click', btnMinPlus, false);
+  document.getElementById('btnMinMinus').addEventListener('click', btnMinMinus, false);
+  document.getElementById('btnSecPlus').addEventListener('click', btnSecPlus, false);
+  document.getElementById('btnSecMinus').addEventListener('click', btnSecMinus, false);
+  document.getElementById('btnReset').addEventListener('click', btnReset, false);
+  document.getElementById('btnStart').addEventListener('click', btnStart, false);
+
+  document.getElementById('btnShotPlus').addEventListener('click', btnShotPlus, false);
+  document.getElementById('btnShotMinus').addEventListener('click', btnShotMinus, false);
+  document.getElementById('btnShotReset').addEventListener('click', btnShotReset, false);
+  document.getElementById('btnShotStart').addEventListener('click', btnShotStart, false);
+
+  document.getElementById('btnScorePlusA').addEventListener('click', btnScorePlusA, false);
+  document.getElementById('btnScoreMinusA').addEventListener('click', btnScoreMinusA, false);
+  document.getElementById('btnScorePlusB').addEventListener('click', btnScorePlusB, false);
+  document.getElementById('btnScoreMinusB').addEventListener('click', btnScoreMinusB, false);
+  document.getElementById('btnScoreChangeCourt').addEventListener('click', btnScoreChangeCourt, false);
+  document.getElementById('btnScoreReset').addEventListener('click', btnScoreReset, false);
+};
+
+/**
+ * Main Clock
+ */
+
+function btnMinPlus() {
+  remainingTime += MINUTE;
+  drawClock();
+}
+
+function btnMinMinus() {
+  if (remainingTime >= MINUTE) {
+    remainingTime -= MINUTE;
   }
   drawClock();
 }
 
-function editShotTime(button) {
-  switch (button.getAttribute('id')) {
-    case 'btnShotPlus':
-      shotRemainingTime += SECOND;
-      break;
-    case 'btnShotMinus':
-      if (shotRemainingTime >= SECOND) {
-        shotRemainingTime -= SECOND;
-      }
-      break;
-    case 'btnShotReset':
-      shotRemainingTime = 30 * SECOND;
-      break;
-    default:
-      break;
-  }
-  drawShotClock();
+function btnSecPlus() {
+  remainingTime += SECOND;
+  drawClock();
 }
 
-function editScore(button) {
-  switch (button.getAttribute('id')) {
-    case 'btnScorePlusA':
-      scoreA++;
-      break;
-    case 'btnScoreMinusA':
-      if (scoreA > 0) {
-        scoreA--;
-      }
-      break;
-    case 'btnScorePlusB':
-      scoreB++;
-      break;
-    case 'btnScoreMinusB':
-      if (scoreB > 0) {
-        scoreB--;
-      }
-      break;
-    case 'btnScoreChangeCourt':
-      var tmpScoreA = scoreA;
-      scoreA = scoreB;
-      scoreB = tmpScoreA;
-      break;
-    case 'btnScoreReset':
-      scoreA = 0;
-      scoreB = 0;
-      break;
-    default:
-      break;
+function btnSecMinus() {
+  if (remainingTime >= SECOND) {
+    remainingTime -= SECOND;
   }
-  drawScore();
+  drawClock();
 }
 
-function startTimer() {
+function btnReset() {
+  remainingTime = 0;
+  drawClock();
+}
+
+function btnStart() {
   switch (mode) {
     case STOP:      // スタートを押したとき
       mode = RUN;
@@ -116,7 +91,73 @@ function startTimer() {
   drawClock();
 }
 
-function startShotTimer() {
+function drawTime(displayTime) {
+  var min = Math.floor(displayTime / MINUTE);
+  var sec = Math.floor((displayTime % MINUTE) / SECOND);
+  var sec100 = Math.floor((displayTime % SECOND) / 10);
+
+  var strTime = ('0' + min).slice(-2) + ':' +
+      ('0' + sec).slice(-2) + '.' +
+      ('0' + sec100).slice(-2);
+  document.getElementById('time').innerHTML = strTime;
+}
+
+function updateRemainingTime() {
+  var now = new Date().getTime();
+  remainingTime -= (now - startTime);
+  if (remainingTime < 0) {
+    remainingTime = 0;
+  }
+  startTime = now;
+}
+
+function runTimer() {
+  updateRemainingTime();
+  if (remainingTime > 0) {
+    timerId = setTimeout(runTimer, 10);
+  } else {
+    mode = STOP;
+  }
+  drawClock();
+}
+
+function drawClock() {
+  updateButtons();
+  drawTime(remainingTime);
+}
+
+function updateButtons() {
+  document.getElementById('btnMinPlus').disabled = (mode === RUN);
+  document.getElementById('btnMinMinus').disabled = (mode === RUN);
+  document.getElementById('btnSecPlus').disabled = (mode === RUN);
+  document.getElementById('btnSecMinus').disabled = (mode === RUN);
+  document.getElementById('btnReset').disabled = (mode === RUN);
+  document.getElementById('btnStart').disabled = (remainingTime <= 0);
+  document.getElementById('btnStart').innerHTML = (mode === RUN) ? 'STOP' : 'START';
+}
+
+/**
+ * Shot Clock
+ */
+
+function btnShotPlus() {
+  shotRemainingTime += SECOND;
+  drawShotClock();
+}
+
+function btnShotMinus() {
+  if (shotRemainingTime >= SECOND) {
+    shotRemainingTime -= SECOND;
+  }
+  drawShotClock();
+}
+
+function btnShotReset() {
+  shotRemainingTime = 30 * SECOND;
+  drawShotClock();
+}
+
+function btnShotStart() {
   switch (shotClockMode) {
     case STOP:
       shotClockMode = RUN;
@@ -133,52 +174,9 @@ function startShotTimer() {
   drawShotClock();
 }
 
-function updateButtons() {
-  document.getElementById('btnMinPlus').disabled = (mode === RUN);
-  document.getElementById('btnMinMinus').disabled = (mode === RUN);
-  document.getElementById('btnSecPlus').disabled = (mode === RUN);
-  document.getElementById('btnSecMinus').disabled = (mode === RUN);
-  document.getElementById('btnReset').disabled = (mode === RUN);
-  document.getElementById('btnStart').disabled = (remainingTime <= 0);
-  document.getElementById('btnStart').innerHTML = (mode === RUN) ? 'STOP' : 'START';
-}
-
-function updateShotButtons() {
-  document.getElementById('btnShotPlus').disabled = (shotClockMode === RUN);
-  document.getElementById('btnShotMinus').disabled = (shotClockMode === RUN);
-  document.getElementById('btnShotReset').disabled = (shotClockMode === RUN);
-  document.getElementById('btnShotStart').disabled = (shotRemainingTime <= 0);
-  document.getElementById('btnShotStart').innerHTML = (shotClockMode === RUN) ? 'STOP' : 'START';
-}
-
-function drawTime(displayTime) {
-  var min = Math.floor(displayTime / MINUTE);
-  var sec = Math.floor((displayTime % MINUTE) / SECOND);
-  var sec100 = Math.floor((displayTime % SECOND) / 10);
-
-  var strTime = ('0' + min).slice(-2) + ':' +
-      ('0' + sec).slice(-2) + '.' +
-      ('0' + sec100).slice(-2);
-  document.getElementById('time').innerHTML = strTime;
-}
-
 function drawShotTime(displayTime) {
   var sec = Math.floor(displayTime / SECOND);
   document.getElementById('shotTime').innerHTML = ('0' + sec).slice(-2);
-}
-
-function drawScore() {
-  document.getElementById('scoreA').innerHTML = scoreA;
-  document.getElementById('scoreB').innerHTML = scoreB;
-}
-
-function updateRemainingTime() {
-  var now = new Date().getTime();
-  remainingTime -= (now - startTime);
-  if (remainingTime < 0) {
-    remainingTime = 0;
-  }
-  startTime = now;
 }
 
 function updateShotRemainingTime() {
@@ -188,16 +186,6 @@ function updateShotRemainingTime() {
     shotRemainingTime = 0;
   }
   shotStartTime = now;
-}
-
-function runTimer() {
-  updateRemainingTime();
-  if (remainingTime > 0) {
-    timerId = setTimeout(runTimer, 10);
-  } else {
-    mode = STOP;
-  }
-  drawClock();
 }
 
 function runShotTimer() {
@@ -210,12 +198,60 @@ function runShotTimer() {
   drawShotClock();
 }
 
-function drawClock() {
-  updateButtons();
-  drawTime(remainingTime);
-}
-
 function drawShotClock() {
   updateShotButtons();
   drawShotTime(shotRemainingTime);
+}
+
+function updateShotButtons() {
+  document.getElementById('btnShotPlus').disabled = (shotClockMode === RUN);
+  document.getElementById('btnShotMinus').disabled = (shotClockMode === RUN);
+  document.getElementById('btnShotReset').disabled = (shotClockMode === RUN);
+  document.getElementById('btnShotStart').disabled = (shotRemainingTime <= 0);
+  document.getElementById('btnShotStart').innerHTML = (shotClockMode === RUN) ? 'STOP' : 'START';
+}
+
+/**
+ * Scoreboard
+ */
+
+function btnScorePlusA() {
+  scoreA++;
+  drawScore();
+}
+
+function btnScoreMinusA() {
+  if (scoreA > 0) {
+    scoreA--;
+  }
+  drawScore();
+}
+
+function btnScorePlusB() {
+  scoreB++;
+  drawScore();
+}
+
+function btnScoreMinusB() {
+  if (scoreB > 0) {
+    scoreB--;
+  }
+  drawScore();
+}
+
+function btnScoreChangeCourt() {
+  var tmpScoreA = scoreA;
+  scoreA = scoreB;
+  scoreB = tmpScoreA;
+  drawScore();
+}
+
+function btnScoreReset() {
+  scoreA = scoreB = 0;
+  drawScore();
+}
+
+function drawScore() {
+  document.getElementById('scoreA').innerHTML = scoreA;
+  document.getElementById('scoreB').innerHTML = scoreB;
 }
